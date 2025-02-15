@@ -4,31 +4,28 @@ import com.manages_commerce.data_microservice.domain.entities.db.Product;
 import com.manages_commerce.data_microservice.domain.entities.dto.ProductDTO;
 import com.manages_commerce.data_microservice.infraestructure.mappers.ProductMapper;
 import com.manages_commerce.data_microservice.infraestructure.repository.ProductRepository;
-import com.manages_commerce.data_microservice.usecases.interfaces.CreateProductInterface;
+import com.manages_commerce.data_microservice.usecases.interfaces.UpdateProductInterface;
 import jakarta.transaction.Transactional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
-public class CreateProduct implements CreateProductInterface {
-
-    public static final Logger LOGGER = LoggerFactory.getLogger(CreateProduct.class);
-
-    @Autowired
-    ProductMapper productMapper;
+public class UpdateProduct implements UpdateProductInterface {
 
     @Autowired
     ProductRepository productRepository;
 
     @Override
-    public String create(ProductDTO productDTO) {
+    public Product update(Product product) {
 
-        Product product = this.productMapper.productDTOToProduct(productDTO);
+        Optional<Product> optionalProduct =  this.productRepository.findById(product.getId());
 
-        this.productRepository.save(product);
-
-        return product.getId();
+        if(optionalProduct.isPresent()){
+            this.productRepository.save(product);
+            return  product;
+        }
+        return null;
     }
 }

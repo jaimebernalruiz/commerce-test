@@ -2,6 +2,8 @@ package com.manages_commerce.products_microservice.infraestructure.clients;
 
 import com.manages_commerce.products_microservice.entities.dto.ProductDTO;
 import com.manages_commerce.products_microservice.entities.rest.CreateProductRs;
+import com.manages_commerce.products_microservice.entities.rest.GetProductsRs;
+import com.manages_commerce.products_microservice.entities.rest.UpdateProductRs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class DataMicroserviceClient {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(DataMicroserviceClient.class);
-
     private final WebClient webClient;
 
     @Autowired
@@ -31,7 +32,67 @@ public class DataMicroserviceClient {
                 .bodyToMono(CreateProductRs.class)
                 .block();
 
-            System.out.println(response);
+            return response;
+        }
+
+    public void deleteProduct(String id){
+
+        CreateProductRs response = this.webClient.delete()
+                .uri("http://localhost:8082/data-microservice/products/"+id)
+                .retrieve()
+                .bodyToMono(CreateProductRs.class)
+                .block();
+    }
+
+    public UpdateProductRs updateProduct(ProductDTO productDTO){
+
+        UpdateProductRs response = this.webClient.put()
+                .uri("http://localhost:8082/data-microservice/products")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(productDTO)
+                .retrieve()
+                .bodyToMono(UpdateProductRs.class)
+                .block();
+
+        return response;
+    }
+
+    public GetProductsRs getProducts(){
+
+        GetProductsRs response = this.webClient.get()
+                .uri("http://localhost:8082/data-microservice/products")
+                .retrieve()
+                .bodyToMono(GetProductsRs.class)
+                .block();
+
+        return response;
+    }
+
+    public GetProductsRs filterProducts(String name, String category, Double minPrice, Double maxPrice){
+
+        String params = "";
+
+        if(!(name == null)){
+            params += "name=" + name;
+        }
+
+        if(!(category == null)){
+            params += "&category=" + category;
+        }
+
+        if(!(minPrice == null)){
+            params += "&minPrice=" + minPrice;
+        }
+
+        if(!(maxPrice == null)){
+            params += "&maxPrice=" + maxPrice;
+        }
+
+        GetProductsRs response = this.webClient.get()
+                .uri("http://localhost:8082/data-microservice/products/filter?"+params)
+                .retrieve()
+                .bodyToMono(GetProductsRs.class)
+                .block();
 
         return response;
     }
