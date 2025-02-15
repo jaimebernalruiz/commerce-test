@@ -1,9 +1,13 @@
 package com.manages_commerce.data_microservice.infraestructure.controller;
 
+import com.manages_commerce.data_microservice.domain.entities.dto.ProductDTO;
 import com.manages_commerce.data_microservice.domain.entities.dto.UserDTO;
+import com.manages_commerce.data_microservice.domain.entities.rest.order.GetOrdersRs;
+import com.manages_commerce.data_microservice.domain.entities.rest.product.GetProductRs;
 import com.manages_commerce.data_microservice.domain.entities.rest.user.CreateUserRs;
 import com.manages_commerce.data_microservice.domain.entities.rest.user.ValidateUserRs;
 import com.manages_commerce.data_microservice.usecases.implementations.user.CreateUser;
+import com.manages_commerce.data_microservice.usecases.implementations.user.GetOrders;
 import com.manages_commerce.data_microservice.usecases.implementations.user.ValidateUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +27,9 @@ public class UserController {
 
     @Autowired
     ValidateUser validateUser;
+
+    @Autowired
+    GetOrders getOrders;
 
     @PostMapping(
             produces = MediaType.APPLICATION_JSON_VALUE,
@@ -48,6 +55,16 @@ public class UserController {
         String id = this.validateUser.validate(userDTO);
 
         return ValidateUserRs.builder().idUser(id).build();
+    }
+
+    @GetMapping(value = "/{id}/orders",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public GetOrdersRs getOrdersByUser(@PathVariable String id){
+
+        GetOrdersRs result = this.getOrders.getOrders(id);
+        return result;
     }
 
 }
