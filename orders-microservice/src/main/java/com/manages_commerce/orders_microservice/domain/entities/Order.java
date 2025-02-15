@@ -1,4 +1,4 @@
-package com.manages_commerce.products_microservice.domain.entities;
+package com.manages_commerce.orders_microservice.domain.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -7,16 +7,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Data
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "products")
-public class Product {
+@Table(name = "orders")
+public class Order {
 
     @Id
     private Long id;
-    private String name;
-    private String category;
-    private Double price;
+    private Double total;
 }
