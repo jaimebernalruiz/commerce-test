@@ -1,4 +1,4 @@
-package com.manages_commerce.data_microservice.domain.entities;
+package com.manages_commerce.data_microservice.domain.entities.db;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,8 @@ import lombok.NoArgsConstructor;
 public class OrderProduct {
 
     @Id
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
     private Double total;
     private Integer quantity;
 
