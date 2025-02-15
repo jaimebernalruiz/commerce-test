@@ -2,12 +2,10 @@ package com.manages_commerce.products_microservice.infraestructure.controller;
 
 import com.manages_commerce.products_microservice.entities.dto.ProductDTO;
 import com.manages_commerce.products_microservice.entities.rest.CreateProductRs;
+import com.manages_commerce.products_microservice.entities.rest.GetProductRs;
 import com.manages_commerce.products_microservice.entities.rest.GetProductsRs;
 import com.manages_commerce.products_microservice.entities.rest.UpdateProductRs;
-import com.manages_commerce.products_microservice.usecases.implementations.CreateProduct;
-import com.manages_commerce.products_microservice.usecases.implementations.DeleteProduct;
-import com.manages_commerce.products_microservice.usecases.implementations.GetProducts;
-import com.manages_commerce.products_microservice.usecases.implementations.UpdateProduct;
+import com.manages_commerce.products_microservice.usecases.implementations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +26,9 @@ public class ProductController {
 
     @Autowired
     GetProducts getListProducts;
+
+    @Autowired
+    GetProduct getProduct;
 
     @Autowired
     UpdateProduct updateProduct;
@@ -52,6 +53,17 @@ public class ProductController {
     public GetProductsRs getProducts(){
 
         return this.getListProducts.getProducts();
+    }
+
+    @GetMapping(value = "/{id}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public GetProductRs getProduct(@PathVariable String id){
+
+        GetProductRs result = this.getProduct.getProduct(id);
+
+        return result;
     }
 
     @DeleteMapping(value = "/{id}")

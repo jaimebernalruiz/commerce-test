@@ -2,6 +2,7 @@ package com.manages_commerce.products_microservice.infraestructure.clients;
 
 import com.manages_commerce.products_microservice.entities.dto.ProductDTO;
 import com.manages_commerce.products_microservice.entities.rest.CreateProductRs;
+import com.manages_commerce.products_microservice.entities.rest.GetProductRs;
 import com.manages_commerce.products_microservice.entities.rest.GetProductsRs;
 import com.manages_commerce.products_microservice.entities.rest.UpdateProductRs;
 import org.slf4j.Logger;
@@ -63,6 +64,17 @@ public class DataMicroserviceClient {
                 .uri("http://localhost:8082/data-microservice/products")
                 .retrieve()
                 .bodyToMono(GetProductsRs.class)
+                .block();
+
+        return response;
+    }
+
+    public GetProductRs getProduct(String id){
+
+        GetProductRs response = this.webClient.get()
+                .uri("http://localhost:8082/data-microservice/products/"+id)
+                .retrieve()
+                .bodyToMono(GetProductRs.class)
                 .block();
 
         return response;

@@ -5,13 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class ProductDTO {
+public class OrderDTO {
 
-    private String name;
-    private String category;
-    private Double price;
+    private List<OrderProductDTO> orderProducts;
+    private Double total;
+    private String idUser;
 }

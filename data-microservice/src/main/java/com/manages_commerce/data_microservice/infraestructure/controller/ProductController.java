@@ -3,12 +3,10 @@ package com.manages_commerce.data_microservice.infraestructure.controller;
 import com.manages_commerce.data_microservice.domain.entities.db.Product;
 import com.manages_commerce.data_microservice.domain.entities.dto.ProductDTO;
 import com.manages_commerce.data_microservice.domain.entities.rest.product.CreateProductRs;
+import com.manages_commerce.data_microservice.domain.entities.rest.product.GetProductRs;
 import com.manages_commerce.data_microservice.domain.entities.rest.product.GetProductsRs;
 import com.manages_commerce.data_microservice.domain.entities.rest.product.UpdateProductRs;
-import com.manages_commerce.data_microservice.usecases.implementations.product.CreateProduct;
-import com.manages_commerce.data_microservice.usecases.implementations.product.DeleteProduct;
-import com.manages_commerce.data_microservice.usecases.implementations.product.GetProducts;
-import com.manages_commerce.data_microservice.usecases.implementations.product.UpdateProduct;
+import com.manages_commerce.data_microservice.usecases.implementations.product.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +30,9 @@ public class ProductController {
 
     @Autowired
     GetProducts getProducts;
+
+    @Autowired
+    GetProduct getProduct;
 
     @Autowired
     DeleteProduct deleteProduct;
@@ -59,6 +60,20 @@ public class ProductController {
 
         GetProductsRs result = GetProductsRs.builder()
                 .products(products).build();
+
+        return result;
+    }
+
+    @GetMapping(value = "/{id}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public GetProductRs getProduct(@PathVariable String id){
+
+        ProductDTO productDTO = this.getProduct.getProduct(id);
+
+        GetProductRs result = GetProductRs.builder()
+                .product(productDTO).build();
 
         return result;
     }
