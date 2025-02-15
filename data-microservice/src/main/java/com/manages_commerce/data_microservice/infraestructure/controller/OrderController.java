@@ -1,9 +1,7 @@
 package com.manages_commerce.data_microservice.infraestructure.controller;
 
 import com.manages_commerce.data_microservice.domain.entities.dto.OrderDTO;
-import com.manages_commerce.data_microservice.domain.entities.dto.ProductDTO;
 import com.manages_commerce.data_microservice.domain.entities.rest.order.CreateOrderRs;
-import com.manages_commerce.data_microservice.domain.entities.rest.product.CreateProductRs;
 import com.manages_commerce.data_microservice.usecases.implementations.order.CreateOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

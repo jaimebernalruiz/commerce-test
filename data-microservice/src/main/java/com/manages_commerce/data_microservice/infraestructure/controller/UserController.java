@@ -1,7 +1,6 @@
 package com.manages_commerce.data_microservice.infraestructure.controller;
 
 import com.manages_commerce.data_microservice.domain.entities.dto.UserDTO;
-import com.manages_commerce.data_microservice.domain.entities.rest.product.CreateProductRs;
 import com.manages_commerce.data_microservice.domain.entities.rest.user.CreateUserRs;
 import com.manages_commerce.data_microservice.domain.entities.rest.user.ValidateUserRs;
 import com.manages_commerce.data_microservice.usecases.implementations.user.CreateUser;
