@@ -1,4 +1,4 @@
-package com.manages_commerce.data_microservice.usecases.interfaces;
+package com.manages_commerce.data_microservice.usecases.interfaces.product;
 
 public interface DeleteProductInterface {
 

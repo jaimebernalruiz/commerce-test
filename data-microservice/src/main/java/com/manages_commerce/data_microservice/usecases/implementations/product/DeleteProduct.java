@@ -1,8 +1,7 @@
-package com.manages_commerce.data_microservice.usecases.implementations;
+package com.manages_commerce.data_microservice.usecases.implementations.product;
 
 import com.manages_commerce.data_microservice.infraestructure.repository.ProductRepository;
-import com.manages_commerce.data_microservice.usecases.interfaces.DeleteProductInterface;
-import jakarta.transaction.Transactional;
+import com.manages_commerce.data_microservice.usecases.interfaces.product.DeleteProductInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

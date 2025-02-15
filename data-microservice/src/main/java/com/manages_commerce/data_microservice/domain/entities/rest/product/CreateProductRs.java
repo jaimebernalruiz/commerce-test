@@ -1,4 +1,4 @@
-package com.manages_commerce.data_microservice.domain.entities.rest;
+package com.manages_commerce.data_microservice.domain.entities.rest.product;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
