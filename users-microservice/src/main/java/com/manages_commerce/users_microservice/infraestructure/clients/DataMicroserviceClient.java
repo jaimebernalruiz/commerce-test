@@ -2,6 +2,7 @@ package com.manages_commerce.users_microservice.infraestructure.clients;
 
 import com.manages_commerce.users_microservice.domain.entities.dto.UserDTO;
 import com.manages_commerce.users_microservice.domain.entities.rest.CreateUserRs;
+import com.manages_commerce.users_microservice.domain.entities.rest.ValidateUserRs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,19 @@ public class DataMicroserviceClient {
                 .bodyValue(userDTO)
                 .retrieve()
                 .bodyToMono(CreateUserRs.class)
+                .block();
+
+        return response;
+    }
+
+    public ValidateUserRs validateUser(UserDTO userDTO){
+
+        ValidateUserRs response = this.webClient.post()
+                .uri("http://localhost:8082/data-microservice/users/validate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(userDTO)
+                .retrieve()
+                .bodyToMono(ValidateUserRs.class)
                 .block();
 
         return response;

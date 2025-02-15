@@ -24,7 +24,7 @@ public class GetProducts implements GetProductsInterface {
     @Override
     public List<Product> filterProducts(String name, String category,Double minPrice, Double maxPrice) {
 
-        List<Product> products = this.productRepository.filterByName(name, category,minPrice,maxPrice);
+        List<Product> products = this.productRepository.filterProduct(name, category,minPrice,maxPrice);
         return products;
     }
 }

@@ -3,7 +3,9 @@ package com.manages_commerce.data_microservice.infraestructure.controller;
 import com.manages_commerce.data_microservice.domain.entities.dto.UserDTO;
 import com.manages_commerce.data_microservice.domain.entities.rest.product.CreateProductRs;
 import com.manages_commerce.data_microservice.domain.entities.rest.user.CreateUserRs;
+import com.manages_commerce.data_microservice.domain.entities.rest.user.ValidateUserRs;
 import com.manages_commerce.data_microservice.usecases.implementations.user.CreateUser;
+import com.manages_commerce.data_microservice.usecases.implementations.user.ValidateUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ public class UserController {
     @Autowired
     CreateUser createUser;
 
+    @Autowired
+    ValidateUser validateUser;
+
     @PostMapping(
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -32,4 +37,18 @@ public class UserController {
         CreateUserRs result = CreateUserRs.builder().idUser(id).build();
         return result;
     }
+
+
+    @PostMapping(value = "/validate",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public ValidateUserRs validateUser(@RequestBody UserDTO userDTO){
+
+        String id = this.validateUser.validate(userDTO);
+
+        return ValidateUserRs.builder().idUser(id).build();
+    }
+
 }
