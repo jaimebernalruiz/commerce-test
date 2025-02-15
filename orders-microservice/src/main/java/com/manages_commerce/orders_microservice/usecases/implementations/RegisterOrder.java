@@ -39,7 +39,6 @@ public class RegisterOrder implements RegisterOrderInterface {
                             .total(result.getProduct().getPrice() * product.getQuantity())
                             .build();
                 }).toList();
-
         Double totalOrder = orderProducts.stream().mapToDouble(OrderProductDTO::getTotal).sum();
         OrderDTO orderDTO = OrderDTO.builder()
                 .orderProducts(orderProducts)

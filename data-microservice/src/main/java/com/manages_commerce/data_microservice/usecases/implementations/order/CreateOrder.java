@@ -58,7 +58,7 @@ public class CreateOrder implements CreateOrderInterface {
                 findById(orderProductDTO.getIdProduct()).get();
 
         return  OrderProduct.builder()
-                .total(order.getTotal())
+                .total(orderProductDTO.getTotal())
                 .quantity(orderProductDTO.getQuantity())
                 .order(order)
                 .product(product)
