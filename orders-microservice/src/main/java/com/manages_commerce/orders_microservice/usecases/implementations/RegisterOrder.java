@@ -26,12 +26,12 @@ public class RegisterOrder implements RegisterOrderInterface {
 
 
     @Override
-    public CreateOrderRs registerOrder(Order order) {
+    public CreateOrderRs registerOrder(Order order, String token) {
 
 
         List<OrderProductDTO> orderProducts = order.getProducts()
                 .stream().map(product -> {
-                    GetProductRs result = this.productsMicroserviceClient.getProduct(product.getIdProduct());
+                    GetProductRs result = this.productsMicroserviceClient.getProduct(product.getIdProduct(), token);
 
                     return OrderProductDTO.builder()
                             .idProduct(result.getProduct().getId())

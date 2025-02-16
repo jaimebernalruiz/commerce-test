@@ -8,6 +8,7 @@ import com.manages_commerce.products_microservice.entities.rest.UpdateProductRs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -18,6 +19,9 @@ public class DataMicroserviceClient {
     public static final Logger LOGGER = LoggerFactory.getLogger(DataMicroserviceClient.class);
     private final WebClient webClient;
 
+    @Value("${data.microservice.url}")
+    String url;
+
     @Autowired
     public DataMicroserviceClient() {
         this.webClient = WebClient.builder().build();
@@ -26,7 +30,7 @@ public class DataMicroserviceClient {
         public CreateProductRs createProduct(ProductDTO productDTO){
 
             CreateProductRs response = this.webClient.post()
-                .uri("http://localhost:8082/data-microservice/products")
+                .uri(url+"/data-microservice/products")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(productDTO)
                 .retrieve()
@@ -39,7 +43,7 @@ public class DataMicroserviceClient {
     public void deleteProduct(String id){
 
         CreateProductRs response = this.webClient.delete()
-                .uri("http://localhost:8082/data-microservice/products/"+id)
+                .uri(url+"/data-microservice/products/"+id)
                 .retrieve()
                 .bodyToMono(CreateProductRs.class)
                 .block();
@@ -48,7 +52,7 @@ public class DataMicroserviceClient {
     public UpdateProductRs updateProduct(ProductDTO productDTO){
 
         UpdateProductRs response = this.webClient.put()
-                .uri("http://localhost:8082/data-microservice/products")
+                .uri(url+"/data-microservice/products")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(productDTO)
                 .retrieve()
@@ -61,7 +65,7 @@ public class DataMicroserviceClient {
     public GetProductsRs getProducts(){
 
         GetProductsRs response = this.webClient.get()
-                .uri("http://localhost:8082/data-microservice/products")
+                .uri(url+"/data-microservice/products")
                 .retrieve()
                 .bodyToMono(GetProductsRs.class)
                 .block();
@@ -72,7 +76,7 @@ public class DataMicroserviceClient {
     public GetProductRs getProduct(String id){
 
         GetProductRs response = this.webClient.get()
-                .uri("http://localhost:8082/data-microservice/products/"+id)
+                .uri(url+"/data-microservice/products/"+id)
                 .retrieve()
                 .bodyToMono(GetProductRs.class)
                 .block();
@@ -101,7 +105,7 @@ public class DataMicroserviceClient {
         }
 
         GetProductsRs response = this.webClient.get()
-                .uri("http://localhost:8082/data-microservice/products/filter?"+params)
+                .uri(url+"/data-microservice/products/filter?"+params)
                 .retrieve()
                 .bodyToMono(GetProductsRs.class)
                 .block();

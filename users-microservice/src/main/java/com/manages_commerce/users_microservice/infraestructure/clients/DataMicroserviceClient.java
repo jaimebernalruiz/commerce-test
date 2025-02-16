@@ -6,6 +6,7 @@ import com.manages_commerce.users_microservice.domain.entities.rest.ValidateUser
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -17,6 +18,9 @@ public class DataMicroserviceClient {
 
     private final WebClient webClient;
 
+    @Value("${data.microservice.url}")
+    String url;
+
     @Autowired
     public DataMicroserviceClient() {
         this.webClient = WebClient.builder().build();
@@ -25,7 +29,7 @@ public class DataMicroserviceClient {
     public CreateUserRs createUser(UserDTO userDTO){
 
         CreateUserRs response = this.webClient.post()
-                .uri("http://localhost:8082/data-microservice/users")
+                .uri(url+"/data-microservice/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(userDTO)
                 .retrieve()
@@ -38,9 +42,20 @@ public class DataMicroserviceClient {
     public ValidateUserRs validateUser(UserDTO userDTO){
 
         ValidateUserRs response = this.webClient.post()
-                .uri("http://localhost:8082/data-microservice/users/validate")
+                .uri(url+"/data-microservice/users/validate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(userDTO)
+                .retrieve()
+                .bodyToMono(ValidateUserRs.class)
+                .block();
+
+        return response;
+    }
+
+    public ValidateUserRs validateUserById(String userId){
+
+        ValidateUserRs response = this.webClient.get()
+                .uri(url+"/data-microservice/users/"+userId+"/validate")
                 .retrieve()
                 .bodyToMono(ValidateUserRs.class)
                 .block();

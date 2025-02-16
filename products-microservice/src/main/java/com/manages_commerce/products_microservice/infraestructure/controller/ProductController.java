@@ -1,10 +1,7 @@
 package com.manages_commerce.products_microservice.infraestructure.controller;
 
 import com.manages_commerce.products_microservice.entities.dto.ProductDTO;
-import com.manages_commerce.products_microservice.entities.rest.CreateProductRs;
-import com.manages_commerce.products_microservice.entities.rest.GetProductRs;
-import com.manages_commerce.products_microservice.entities.rest.GetProductsRs;
-import com.manages_commerce.products_microservice.entities.rest.UpdateProductRs;
+import com.manages_commerce.products_microservice.entities.rest.*;
 import com.manages_commerce.products_microservice.usecases.implementations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +28,9 @@ public class ProductController {
     GetProduct getProduct;
 
     @Autowired
+    ValidateToken validateToken;
+
+    @Autowired
     UpdateProduct updateProduct;
 
     @Autowired
@@ -41,45 +41,68 @@ public class ProductController {
         consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateProductRs createProduct(@RequestBody ProductDTO productDTO){
-        CreateProductRs result = this.createProduct.create(productDTO);
-        return result;
+    public CreateProductRs createProduct(@RequestBody ProductDTO productDTO,
+                                         @RequestHeader(value="token") String token){
+
+        ValidateTokenUserRs validateTokenUserRs =  this.validateToken.validate(token);
+        if(validateTokenUserRs.getTokenValidate()) {
+            CreateProductRs result = this.createProduct.create(productDTO);
+            return result;
+        }
+        return null;
     }
 
     @GetMapping(
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public GetProductsRs getProducts(){
-
-        return this.getListProducts.getProducts();
+    public GetProductsRs getProducts(@RequestHeader(value="token") String token){
+        ValidateTokenUserRs validateTokenUserRs =  this.validateToken.validate(token);
+        if(validateTokenUserRs.getTokenValidate()) {
+            return this.getListProducts.getProducts();
+        }
+        return null;
     }
 
     @GetMapping(value = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public GetProductRs getProduct(@PathVariable String id){
+    public GetProductRs getProduct(@PathVariable String id,
+                                   @RequestHeader(value="token") String token){
 
-        GetProductRs result = this.getProduct.getProduct(id);
-
-        return result;
+        ValidateTokenUserRs validateTokenUserRs =  this.validateToken.validate(token);
+        if(validateTokenUserRs.getTokenValidate()) {
+            GetProductRs result = this.getProduct.getProduct(id);
+            return result;
+        }
+        return null;
     }
 
     @DeleteMapping(value = "/{id}")
     @ResponseBody
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void removeProduct(@PathVariable String id){
-        this.deleteProduct.deleteProduct(id);
+    public void removeProduct(@PathVariable String id,
+                              @RequestHeader(value="token") String token){
+
+        ValidateTokenUserRs validateTokenUserRs =  this.validateToken.validate(token);
+        if(validateTokenUserRs.getTokenValidate()) {
+            this.deleteProduct.deleteProduct(id);
+        }
     }
 
     @PutMapping
     @ResponseBody
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public UpdateProductRs updateProduct(@RequestBody ProductDTO product){
-        UpdateProductRs result = this.updateProduct.update(product);
+    public UpdateProductRs updateProduct(@RequestBody ProductDTO product,
+                                         @RequestHeader(value="token") String token){
 
-        return result;
+        ValidateTokenUserRs validateTokenUserRs =  this.validateToken.validate(token);
+        if(validateTokenUserRs.getTokenValidate()) {
+            UpdateProductRs result = this.updateProduct.update(product);
+            return result;
+        }
+        return null;
     }
 
     @GetMapping( value = "/filter",
@@ -89,10 +112,14 @@ public class ProductController {
     public GetProductsRs filterProducts(@RequestParam(value = "name", required = false) String name,
                                         @RequestParam(value = "category", required = false) String category,
                                         @RequestParam(value = "minPrice", required = false) Double minPrice,
-                                        @RequestParam(value = "maxPrice", required = false) Double maxPrice){
+                                        @RequestParam(value = "maxPrice", required = false) Double maxPrice,
+                                        @RequestHeader(value="token") String token){
 
-
-        return  getListProducts.filterProducts(name,category,minPrice,maxPrice);
+        ValidateTokenUserRs validateTokenUserRs =  this.validateToken.validate(token);
+        if(validateTokenUserRs.getTokenValidate()) {
+            return  getListProducts.filterProducts(name,category,minPrice,maxPrice);
+        }
+        return null;
     }
 
 }

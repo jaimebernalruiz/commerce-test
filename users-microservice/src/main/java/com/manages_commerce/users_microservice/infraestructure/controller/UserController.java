@@ -2,9 +2,12 @@ package com.manages_commerce.users_microservice.infraestructure.controller;
 
 import com.manages_commerce.users_microservice.domain.entities.dto.UserDTO;
 import com.manages_commerce.users_microservice.domain.entities.rest.CreateUserRs;
+import com.manages_commerce.users_microservice.domain.entities.rest.LoginRs;
+import com.manages_commerce.users_microservice.domain.entities.rest.ValidateTokenUserRs;
 import com.manages_commerce.users_microservice.domain.entities.rest.ValidateUserRs;
 import com.manages_commerce.users_microservice.usecases.implementations.CreateUser;
 import com.manages_commerce.users_microservice.usecases.implementations.LoginUser;
+import com.manages_commerce.users_microservice.usecases.implementations.ValidateToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +27,25 @@ public class UserController {
     @Autowired
     LoginUser loginUser;
 
+    @Autowired
+    ValidateToken validateToken;
+
     @PostMapping(
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateUserRs createProduct(@RequestBody UserDTO userDTO){
+    public CreateUserRs createUser(@RequestBody UserDTO userDTO,
+                                   @RequestHeader(value="token") String token){
 
-        CreateUserRs result = this.createUser.create(userDTO);
+        Boolean tokenValidated = this.validateToken.validateToken(token);
 
-        return result;
+        if(tokenValidated){
+            CreateUserRs result = this.createUser.create(userDTO);
+            return result;
+        }
+
+        return null;
     }
 
     @PostMapping(value = "login",
@@ -41,11 +53,22 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    public ValidateUserRs login(@RequestBody UserDTO userDTO){
+    public LoginRs login(@RequestBody UserDTO userDTO){
 
-        ValidateUserRs result = this.loginUser.login(userDTO);
+        LoginRs result = this.loginUser.login(userDTO);
 
         return result;
+    }
+
+    @GetMapping(value = "/token/validate",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public ValidateTokenUserRs validateToken(@RequestHeader(value="token") String token){
+
+        return ValidateTokenUserRs.builder()
+                .tokenValidate(this.validateToken.validateToken(token))
+                .build();
     }
 
 }

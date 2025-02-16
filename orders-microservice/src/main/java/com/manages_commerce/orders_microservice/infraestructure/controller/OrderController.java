@@ -4,8 +4,10 @@ import com.manages_commerce.orders_microservice.entities.dto.OrderDTO;
 import com.manages_commerce.orders_microservice.entities.rest.CreateOrderRs;
 import com.manages_commerce.orders_microservice.entities.rest.GetOrdersRs;
 import com.manages_commerce.orders_microservice.entities.rest.Order;
+import com.manages_commerce.orders_microservice.entities.rest.ValidateTokenUserRs;
 import com.manages_commerce.orders_microservice.usecases.implementations.GetOrders;
 import com.manages_commerce.orders_microservice.usecases.implementations.RegisterOrder;
+import com.manages_commerce.orders_microservice.usecases.implementations.ValidateToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class OrderController {
     RegisterOrder registerOrder;
 
     @Autowired
+    ValidateToken validateToken;
+
+    @Autowired
     GetOrders getOrders;
 
     @PostMapping(
@@ -30,20 +35,30 @@ public class OrderController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateOrderRs cerateOrder(@RequestBody Order order){
+    public CreateOrderRs createOrder(@RequestBody Order order,
+                                     @RequestHeader(value="token") String token){
 
-        CreateOrderRs result = this.registerOrder.registerOrder(order);
-        return result;
+        ValidateTokenUserRs validateTokenUserRs =  this.validateToken.validate(token);
+        if(validateTokenUserRs.getTokenValidate()){
+            CreateOrderRs result = this.registerOrder.registerOrder(order,token);
+            return result;
+        }
+       return null;
     }
 
     @GetMapping(value = "/users/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public GetOrdersRs getOrdersByUser(@PathVariable String id){
+    public GetOrdersRs getOrdersByUser(@PathVariable String id,
+                                       @RequestHeader(value="token") String token){
 
-        GetOrdersRs result = this.getOrders.getOrders(id);
-        return result;
+        ValidateTokenUserRs validateTokenUserRs =  this.validateToken.validate(token);
+        if(validateTokenUserRs.getTokenValidate()){
+            GetOrdersRs result = this.getOrders.getOrders(id);
+            return result;
+        }
+        return null;
     }
 
 }

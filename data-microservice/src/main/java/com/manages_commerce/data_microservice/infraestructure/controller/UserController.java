@@ -67,4 +67,15 @@ public class UserController {
         return result;
     }
 
+    @GetMapping(value = "/{id}/validate",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public ValidateUserRs validateUserId(@PathVariable String id){
+
+        String idValidated = this.validateUser.validateById(id);
+
+        return ValidateUserRs.builder().idUser(idValidated).build();
+    }
+
 }
