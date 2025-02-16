@@ -36,11 +36,14 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateUserRs createProduct(@RequestBody UserDTO userDTO){
+    public CreateUserRs createUser(@RequestBody UserDTO userDTO){
+        LOGGER.info("@createUser > Start creation a new user");
 
         String id = this.createUser.create(userDTO);
 
         CreateUserRs result = CreateUserRs.builder().idUser(id).build();
+        LOGGER.info("@createUser > Finished creation of a new user");
+
         return result;
     }
 
@@ -51,8 +54,11 @@ public class UserController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public ValidateUserRs validateUser(@RequestBody UserDTO userDTO){
+        LOGGER.info("@validateUser > Start  validation user");
 
         String id = this.validateUser.validate(userDTO);
+        LOGGER.info("@createUser > Finished validation user");
+
 
         return ValidateUserRs.builder().idUser(id).build();
     }
@@ -62,6 +68,7 @@ public class UserController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public GetOrdersRs getOrdersByUser(@PathVariable String id){
+        LOGGER.info("@getOrdersByUser > Get orders by user");
 
         GetOrdersRs result = this.getOrders.getOrders(id);
         return result;
@@ -72,8 +79,10 @@ public class UserController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public ValidateUserRs validateUserId(@PathVariable String id){
+        LOGGER.info("@validateUserId > Start  validation user with id" );
 
         String idValidated = this.validateUser.validateById(id);
+        LOGGER.info("@validateUserId > Finished validation user");
 
         return ValidateUserRs.builder().idUser(idValidated).build();
     }

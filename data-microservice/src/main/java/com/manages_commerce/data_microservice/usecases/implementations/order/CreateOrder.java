@@ -12,6 +12,8 @@ import com.manages_commerce.data_microservice.infraestructure.repository.OrderRe
 import com.manages_commerce.data_microservice.infraestructure.repository.ProductRepository;
 import com.manages_commerce.data_microservice.infraestructure.repository.UserRepository;
 import com.manages_commerce.data_microservice.usecases.interfaces.order.CreateOrderInterface;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,8 @@ import java.util.List;
 
 @Service
 public class CreateOrder implements CreateOrderInterface {
+
+    public static final Logger LOGGER = LoggerFactory.getLogger(CreateOrder.class);
 
     @Autowired
     OrderRepository orderRepository;
@@ -35,7 +39,10 @@ public class CreateOrder implements CreateOrderInterface {
     @Override
     public CreateOrderRs create(OrderDTO orderDTO) {
 
+
         User user = this.userRepository.findById(orderDTO.getIdUser()).get();
+        LOGGER.info("@create > will create a new order with user " + user.getId());
+
 
         Order order = Order.builder()
                 .total(orderDTO.getTotal())
@@ -48,11 +55,13 @@ public class CreateOrder implements CreateOrderInterface {
                 .map(orderProductDTO -> this.createOrderProducts(orderProductDTO, order)).toList();
 
         this.orderProductRepository.saveAll(orderProducts);
+        LOGGER.info("@create > was save order with id " + order.getId());
 
         return CreateOrderRs.builder().idOrder(order.getId()).build();
     }
 
     private  OrderProduct createOrderProducts(OrderProductDTO orderProductDTO, Order order){
+        LOGGER.info("@create > will create a new order_products with order id  " + order.getId());
 
         Product product = this.productRepository.
                 findById(orderProductDTO.getIdProduct()).get();

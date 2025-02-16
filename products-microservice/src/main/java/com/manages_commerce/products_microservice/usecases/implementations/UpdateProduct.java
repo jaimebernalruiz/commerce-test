@@ -4,6 +4,8 @@ import com.manages_commerce.products_microservice.entities.dto.ProductDTO;
 import com.manages_commerce.products_microservice.entities.rest.UpdateProductRs;
 import com.manages_commerce.products_microservice.infraestructure.clients.DataMicroserviceClient;
 import com.manages_commerce.products_microservice.usecases.interfaces.UpdateProductInterface;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,8 @@ import java.util.Optional;
 
 @Service
 public class UpdateProduct implements UpdateProductInterface {
+
+    public static final Logger LOGGER = LoggerFactory.getLogger(UpdateProduct.class);
 
 
     @Autowired
@@ -20,6 +24,7 @@ public class UpdateProduct implements UpdateProductInterface {
 
         UpdateProductRs result = this.dataMicroserviceClient.updateProduct(product);
 
+        LOGGER.info("@update > product was update");
         return result;
     }
 }

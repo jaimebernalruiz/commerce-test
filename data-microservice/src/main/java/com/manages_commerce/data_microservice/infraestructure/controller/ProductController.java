@@ -43,10 +43,13 @@ public class ProductController {
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     public CreateProductRs createProduct(@RequestBody ProductDTO productDTO){
+        LOGGER.info("@createProduct > Start creation a new product");
 
         String id = this.createProduct.create(productDTO);
 
         CreateProductRs result = CreateProductRs.builder().idProduct(id).build();
+        LOGGER.info("@createProduct > Finished creation of a product");
+
         return result;
     }
 
@@ -55,11 +58,14 @@ public class ProductController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public GetProductsRs getProducts(){
+        LOGGER.info("@getProducts > Start get products");
 
         List< Product> products = this.getProducts.getProducts();
 
         GetProductsRs result = GetProductsRs.builder()
                 .products(products).build();
+        LOGGER.info("@getProducts > Finished get products");
+
 
         return result;
     }
@@ -69,11 +75,14 @@ public class ProductController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public GetProductRs getProduct(@PathVariable String id){
+        LOGGER.info("@getProduct > Start get product");
 
         ProductDTO productDTO = this.getProduct.getProduct(id);
 
         GetProductRs result = GetProductRs.builder()
                 .product(productDTO).build();
+        LOGGER.info("@getProduct > Finished get product");
+
 
         return result;
     }
@@ -82,14 +91,21 @@ public class ProductController {
     @ResponseBody
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void removeProduct(@PathVariable String id){
+        LOGGER.info("@removeProduct > Start remove product");
+
         this.deleteProduct.deleteProduct(id);
+        LOGGER.info("@removeProduct > Finished remove product");
+
     }
 
     @PutMapping
     @ResponseBody
     @ResponseStatus(HttpStatus.ACCEPTED)
     public UpdateProductRs updateProduct(@RequestBody Product product){
+        LOGGER.info("@updateProduct > Start update product");
+
         Product result = this.updateProduct.update(product);
+        LOGGER.info("@updateProduct > Finished update product");
 
         return UpdateProductRs.builder().product(result).build();
     }
@@ -102,11 +118,15 @@ public class ProductController {
                                         @RequestParam(value = "category", required = false) String category,
                                         @RequestParam(value = "minPrice", required = false) Double minPrice,
                                         @RequestParam(value = "maxPrice", required = false) Double maxPrice){
+        LOGGER.info("@filterProducts > Start filter product");
+
 
         List< Product> products = this.getProducts.filterProducts(name,category,minPrice,maxPrice);
 
         GetProductsRs result = GetProductsRs.builder()
                 .products(products).build();
+        LOGGER.info("@filterProducts > Finished filter product");
+
 
         return result;
     }

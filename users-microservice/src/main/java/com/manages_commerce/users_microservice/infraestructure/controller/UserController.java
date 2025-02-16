@@ -37,11 +37,14 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public CreateUserRs createUser(@RequestBody UserDTO userDTO,
                                    @RequestHeader(value="token") String token){
+        LOGGER.info("@createUser > Start creation a new user");
 
         Boolean tokenValidated = this.validateToken.validateToken(token);
 
         if(tokenValidated){
             CreateUserRs result = this.createUser.create(userDTO);
+
+            LOGGER.info("@createUser > Finished creation of a new user");
             return result;
         }
 
@@ -54,9 +57,11 @@ public class UserController {
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     public LoginRs login(@RequestBody UserDTO userDTO){
+        LOGGER.info("@login > Start a login with user");
 
         LoginRs result = this.loginUser.login(userDTO);
 
+        LOGGER.info("@login > Finished a login with user");
         return result;
     }
 
@@ -65,6 +70,7 @@ public class UserController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public ValidateTokenUserRs validateToken(@RequestHeader(value="token") String token){
+        LOGGER.info("@validateToken > Start validation token");
 
         return ValidateTokenUserRs.builder()
                 .tokenValidate(this.validateToken.validateToken(token))

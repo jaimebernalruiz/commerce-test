@@ -37,10 +37,13 @@ public class OrderController {
     @ResponseStatus(HttpStatus.CREATED)
     public CreateOrderRs createOrder(@RequestBody Order order,
                                      @RequestHeader(value="token") String token){
+        LOGGER.info("@createOrder > Start creation a new order");
 
         ValidateTokenUserRs validateTokenUserRs =  this.validateToken.validate(token);
         if(validateTokenUserRs.getTokenValidate()){
             CreateOrderRs result = this.registerOrder.registerOrder(order,token);
+            LOGGER.info("@createOrder > Finished creation of a new order");
+
             return result;
         }
        return null;
@@ -52,10 +55,13 @@ public class OrderController {
     @ResponseStatus(HttpStatus.OK)
     public GetOrdersRs getOrdersByUser(@PathVariable String id,
                                        @RequestHeader(value="token") String token){
+        LOGGER.info("@createOrder > Start get order by user");
 
         ValidateTokenUserRs validateTokenUserRs =  this.validateToken.validate(token);
         if(validateTokenUserRs.getTokenValidate()){
             GetOrdersRs result = this.getOrders.getOrders(id);
+            LOGGER.info("@createOrder > Finished get order by user");
+
             return result;
         }
         return null;

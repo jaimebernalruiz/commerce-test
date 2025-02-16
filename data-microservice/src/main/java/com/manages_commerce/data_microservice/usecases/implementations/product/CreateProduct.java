@@ -24,9 +24,11 @@ public class CreateProduct implements CreateProductInterface {
     @Override
     public String create(ProductDTO productDTO) {
 
+        LOGGER.info("@create > Cast object product");
         Product product = this.productMapper.productDTOToProduct(productDTO);
 
         this.productRepository.save(product);
+        LOGGER.info("@create > product was create with id " + product.getId());
 
         return product.getId();
     }

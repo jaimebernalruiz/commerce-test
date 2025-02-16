@@ -25,8 +25,10 @@ public class OrderController {
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     public CreateOrderRs createOrder(@RequestBody OrderDTO orderDTO){
+        LOGGER.info("@createOrder > Start save a new order");
 
         CreateOrderRs result = this.createOrder.create(orderDTO);
+        LOGGER.info("@createOrder > Finished save a new order");
         return result;
     }
 
