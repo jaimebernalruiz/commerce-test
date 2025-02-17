@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.manages-commerce</groupId>
 	<artifactId>users-microservice</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>users-microservice</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>

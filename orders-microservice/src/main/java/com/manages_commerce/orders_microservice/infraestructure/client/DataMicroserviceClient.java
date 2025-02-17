@@ -43,7 +43,7 @@ public class DataMicroserviceClient {
     public GetOrdersRs getOrders(String id){
 
         GetOrdersRs response = this.webClient.get()
-                .uri("http://localhost:8082/data-microservice/users/"+id+"/orders")
+                .uri(url+"/data-microservice/users/"+id+"/orders")
                 .retrieve()
                 .bodyToMono(GetOrdersRs.class)
                 .block();
